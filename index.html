@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>80er Jahre Spielhalle</title>
     <style>
         body {
@@ -35,11 +35,11 @@
             pointer-events: none;
         }
 
-        /* Unsichtbare Tür-Hotspot - angepasst für die komplette mittlere Eingangstür */
+        /* Unsichtbare Tür-Hotspot - responsive angepasst */
         .door-hotspot {
             position: absolute;
-            width: 450px;
-            height: 650px;
+            width: min(450px, 35vw);
+            height: min(650px, 50vh);
             left: 48%;
             top: 70%;
             transform: translate(-50%, -50%);
@@ -95,6 +95,7 @@
                 0 0 20px rgba(0, 255, 0, 0.6),
                 inset 0 0 20px rgba(0, 255, 0, 0.1);
             animation: messageFlicker 2s infinite alternate;
+            max-width: 80%;
         }
 
         .welcome-message.show {
@@ -111,8 +112,6 @@
                 border-color: #00ff88;
             }
         }
-
-
 
         /* Spielhalle Styles (versteckt am Anfang) */
         #gameContainer {
@@ -135,8 +134,8 @@
         /* Bedienungs-Sprite - AUSSERHALB des gameContainer */
         #serviceSprite {
             position: fixed;
-            width: 600px;
-            height: 800px;
+            width: min(600px, 80vw);
+            height: min(800px, 70vh);
             left: 50%;
             top: 45%;
             transform: translate(-50%, -50%);
@@ -168,7 +167,7 @@
             padding: 30px 50px;
             border-radius: 25px;
             border: 5px solid #00AAFF;
-            font-size: 22px;
+            font-size: clamp(16px, 3vw, 22px);
             text-align: center;
             opacity: 0;
             transition: all 0.5s ease;
@@ -177,6 +176,7 @@
                 0 0 40px rgba(0, 170, 255, 1),
                 inset 0 0 40px rgba(0, 170, 255, 0.2);
             animation: serviceFlicker 2.5s infinite alternate;
+            max-width: 90%;
         }
 
         .service-message.show {
@@ -194,15 +194,34 @@
             }
         }
 
-        .arcade-machine {
+        /* Arcade Machine Container für bessere Positionierung */
+        .arcade-machines-container {
             position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70%;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: flex-end;
+            padding: 0 5% 10% 5%;
+            perspective: 1000px;
+        }
+
+        .arcade-machine {
             cursor: pointer;
             transition: all 0.3s ease;
             filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+            width: 20%;
+            max-width: 280px;
+            height: auto;
+            aspect-ratio: 2/3;
+            position: relative;
+            transform-style: preserve-3d;
         }
 
         .arcade-machine:hover {
-            transform: scale(1.05);
+            transform: scale(1.05) translateY(-10px);
             filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8)) 
                     drop-shadow(0 0 30px rgba(255, 255, 255, 0.6))
                     drop-shadow(0 0 40px rgba(255, 255, 255, 0.4));
@@ -220,11 +239,12 @@
             top: 5%;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 3rem;
+            font-size: clamp(1.5rem, 5vw, 3rem);
             color: #ff00ff;
             text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
             animation: neonFlicker 2s infinite alternate;
             z-index: 100;
+            white-space: nowrap;
         }
 
         @keyframes neonFlicker {
@@ -236,42 +256,9 @@
             }
         }
 
-        /* Automaten-Positionen */
-        #jetattack {
-            width: 280px;
-            height: 420px;
-            left: 15%;
-            bottom: 25%;
-            top: auto;
-        }
-
-        #junglerun {
-            width: 280px;
-            height: 420px;
-            left: 30%;
-            bottom: 25%;
-            top: auto;
-        }
-
-        #tankbattle {
-            width: 280px;
-            height: 420px;
-            left: 45%;
-            bottom: 25%;
-            top: auto;
-        }
-
-        #spaceenemy {
-            width: 280px;
-            height: 420px;
-            left: 60%;
-            bottom: 25%;
-            top: auto;
-        }
-
-        /* Hover-Informationen - Grundstil ohne feste Farbe */
+        /* Hover-Informationen */
         .game-info {
-            position: absolute;
+            position: fixed;
             bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
@@ -281,9 +268,10 @@
             border: 2px solid;
             opacity: 0;
             transition: all 0.3s ease;
-            font-size: 14px;
+            font-size: clamp(12px, 2vw, 14px);
             text-align: center;
             z-index: 1000;
+            max-width: 90%;
         }
 
         .game-info.show {
@@ -379,6 +367,112 @@
         .transition-overlay.active {
             opacity: 1;
         }
+
+        /* Mobile und Tablet Optimierungen */
+        @media screen and (max-width: 768px) {
+            .arcade-machines-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 0 2% 5% 2%;
+                gap: 10px;
+            }
+
+            .arcade-machine {
+                width: 40%;
+                max-width: 180px;
+                margin-bottom: 20px;
+            }
+
+            .neon-title {
+                font-size: clamp(1.2rem, 4vw, 2rem);
+                top: 2%;
+            }
+
+            .door-hotspot {
+                width: 50vw;
+                height: 60vh;
+            }
+
+            #serviceSprite {
+                width: 90vw;
+                height: 60vh;
+            }
+        }
+
+        @media screen and (min-width: 769px) and (max-width: 1024px) {
+            /* Tablet Portrait */
+            .arcade-machines-container {
+                padding: 0 3% 8% 3%;
+            }
+
+            .arcade-machine {
+                width: 22%;
+                max-width: 200px;
+            }
+        }
+
+        @media screen and (min-width: 1025px) and (max-width: 1366px) {
+            /* Tablet Landscape & kleine Desktops */
+            .arcade-machines-container {
+                padding: 0 4% 10% 4%;
+            }
+
+            .arcade-machine {
+                width: 20%;
+                max-width: 240px;
+            }
+        }
+
+        @media screen and (min-width: 1367px) {
+            /* Desktop */
+            .arcade-machines-container {
+                padding: 0 5% 12% 5%;
+            }
+
+            .arcade-machine {
+                width: 18%;
+                max-width: 280px;
+            }
+        }
+
+        /* Touch-Geräte Optimierungen */
+        @media (hover: none) and (pointer: coarse) {
+            body {
+                cursor: default;
+            }
+
+            .door-hotspot,
+            .arcade-machine,
+            #serviceSprite {
+                cursor: pointer;
+            }
+
+            /* Tap-Highlight für Touch-Geräte */
+            .door-hotspot:active,
+            .arcade-machine:active,
+            #serviceSprite:active {
+                transform: scale(0.95);
+            }
+        }
+
+        /* Landscape Modus für mobile Geräte */
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+            .arcade-machines-container {
+                height: 80%;
+                padding-bottom: 5%;
+            }
+
+            .arcade-machine {
+                width: 15%;
+                max-width: 150px;
+            }
+
+            .neon-title {
+                font-size: 1.5rem;
+                top: 2%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -402,21 +496,23 @@
     <div id="gameContainer">
         <div class="neon-title">RETRO ARCADE</div>
         
-        <!-- Arcade-Automaten -->
-        <div id="jetattack" class="arcade-machine" data-game="Jet Attack">
-            <img src="./Arcade_Jetattack.png" alt="Jet Attack" onerror="console.error('Fehler beim Laden:', this.src)" />
-        </div>
-        
-        <div id="junglerun" class="arcade-machine" data-game="Jungle Run">
-            <img src="./Arcade_Junglerun.png" alt="Jungle Run" onerror="console.error('Fehler beim Laden:', this.src)" />
-        </div>
-        
-        <div id="tankbattle" class="arcade-machine" data-game="Tank Battle">
-            <img src="./Arcade_Tankbattle.png" alt="Tank Battle" onerror="console.error('Fehler beim Laden:', this.src)" />
-        </div>
-        
-        <div id="spaceenemy" class="arcade-machine" data-game="Space Enemy">
-            <img src="./Arcade_Spaceenemy.png" alt="Space Enemy" onerror="console.error('Fehler beim Laden:', this.src)" />
+        <!-- Arcade-Automaten Container -->
+        <div class="arcade-machines-container">
+            <div id="jetattack" class="arcade-machine" data-game="Jet Attack">
+                <img src="./Arcade_Jetattack.png" alt="Jet Attack" onerror="console.error('Fehler beim Laden:', this.src)" />
+            </div>
+            
+            <div id="junglerun" class="arcade-machine" data-game="Jungle Run">
+                <img src="./Arcade_Junglerun.png" alt="Jungle Run" onerror="console.error('Fehler beim Laden:', this.src)" />
+            </div>
+            
+            <div id="tankbattle" class="arcade-machine" data-game="Tank Battle">
+                <img src="./Arcade_Tankbattle.png" alt="Tank Battle" onerror="console.error('Fehler beim Laden:', this.src)" />
+            </div>
+            
+            <div id="spaceenemy" class="arcade-machine" data-game="Space Enemy">
+                <img src="./Arcade_Spaceenemy.png" alt="Space Enemy" onerror="console.error('Fehler beim Laden:', this.src)" />
+            </div>
         </div>
         
         <!-- Hover-Info -->
@@ -448,28 +544,28 @@
             'Jet Attack': {
                 title: 'JET ATTACK',
                 description: 'Fliege durch feindliche Linien und vernichte alle Gegner!',
-                color: '#FFFFFF', // Weiß für bessere Lesbarkeit
+                color: '#FFFFFF',
                 borderColor: '#CCCCCC',
                 url: 'https://wilski54.github.io/Jetattack/'
             },
             'Jungle Run': {
                 title: 'JUNGLE RUN',
                 description: 'Springe und laufe durch den gefährlichen Dschungel!',
-                color: '#FFD700', // Goldgelb für den gelben Automaten
+                color: '#FFD700',
                 borderColor: '#FFA500',
                 url: 'https://wilski54.github.io/Junglerun/'
             },
             'Tank Battle': {
                 title: 'TANK BATTLE',
                 description: 'Kommandiere deinen Panzer im epischen Kampf!',
-                color: '#00AA44', // Grün für den grünen Automaten
+                color: '#00AA44',
                 borderColor: '#00FF66',
                 url: 'https://wilski54.github.io/panzer/'
             },
             'Space Enemy': {
                 title: 'SPACE ENEMY',
                 description: 'Verteidige die Erde gegen außerirdische Invasoren!',
-                color: '#FF4422', // Rot für den roten Automaten
+                color: '#FF4422',
                 borderColor: '#FF6644',
                 url: 'https://wilski54.github.io/Spaceenemy/'
             }
@@ -489,22 +585,38 @@
         let backgroundMusic = null;
         let entranceMusic = null;
 
-        // Tür-Hover-Effekt
-        doorHotspot.addEventListener('mouseenter', function() {
-            welcomeMessage.classList.add('show');
-            playHoverSound();
-        });
+        // Touch-Event Unterstützung
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-        doorHotspot.addEventListener('mouseleave', function() {
-            welcomeMessage.classList.remove('show');
-        });
+        // Tür-Hover-Effekt (nur für nicht-Touch-Geräte)
+        if (!isTouchDevice) {
+            doorHotspot.addEventListener('mouseenter', function() {
+                welcomeMessage.classList.add('show');
+                playHoverSound();
+            });
+
+            doorHotspot.addEventListener('mouseleave', function() {
+                welcomeMessage.classList.remove('show');
+            });
+        } else {
+            // Für Touch-Geräte: Nachricht immer anzeigen
+            setTimeout(() => {
+                welcomeMessage.classList.add('show');
+            }, 500);
+        }
 
         // Tür-Klick: Betrete die Spielhalle
-        doorHotspot.addEventListener('click', function() {
+        doorHotspot.addEventListener('click', enterArcadeHandler);
+        doorHotspot.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            enterArcadeHandler();
+        });
+
+        function enterArcadeHandler() {
             if (!isInArcade) {
                 enterArcade();
             }
-        });
+        }
 
         // Spielhalle betreten
         function enterArcade() {
@@ -533,24 +645,37 @@
             if (!serviceInteractionDone) {
                 serviceSprite.style.display = 'block';
                 
-                // Hover-Effekt für Bedienung
-                serviceSprite.addEventListener('mouseenter', function() {
-                    serviceMessage.classList.add('show');
-                    playHoverSound();
-                });
+                // Hover-Effekt für Bedienung (nur für nicht-Touch-Geräte)
+                if (!isTouchDevice) {
+                    serviceSprite.addEventListener('mouseenter', function() {
+                        serviceMessage.classList.add('show');
+                        playHoverSound();
+                    });
 
-                serviceSprite.addEventListener('mouseleave', function() {
-                    serviceMessage.classList.remove('show');
-                });
+                    serviceSprite.addEventListener('mouseleave', function() {
+                        serviceMessage.classList.remove('show');
+                    });
+                } else {
+                    // Für Touch-Geräte: Nachricht immer anzeigen
+                    setTimeout(() => {
+                        serviceMessage.classList.add('show');
+                    }, 200);
+                }
 
                 // Klick: Bedienung entfernen und Hintergrundmusik starten
-                serviceSprite.addEventListener('click', function() {
-                    dismissService();
+                serviceSprite.addEventListener('click', dismissServiceHandler);
+                serviceSprite.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    dismissServiceHandler();
                 });
             } else {
                 // Wenn bereits interagiert, direkt zur Spielhalle
                 initializeArcade();
             }
+        }
+
+        function dismissServiceHandler() {
+            dismissService();
         }
 
         // Bedienung entfernen
@@ -580,12 +705,10 @@
             try {
                 backgroundMusic = new Audio('spielhalle2.mp3');
                 backgroundMusic.loop = true;
-                backgroundMusic.volume = 0.3; // Leise Hintergrundmusik
+                backgroundMusic.volume = 0.3;
                 
-                // Musik starten (nach User-Interaktion)
                 backgroundMusic.play().catch(e => {
                     console.log('Hintergrundmusik konnte nicht automatisch gestartet werden:', e);
-                    // Fallback: Musik bei nächster User-Interaktion starten
                     document.addEventListener('click', function startMusicOnce() {
                         backgroundMusic.play();
                         document.removeEventListener('click', startMusicOnce);
@@ -636,32 +759,49 @@
             const gameDesc = document.getElementById('gameDesc');
 
             machines.forEach(machine => {
-                machine.addEventListener('mouseenter', function() {
-                    const gameName = this.getAttribute('data-game');
-                    const game = gameData[gameName];
-                    
-                    gameTitle.textContent = game.title;
-                    gameDesc.textContent = game.description;
-                    
-                    // Farbe der Textbox an Automatenfarbe anpassen
-                    gameInfo.style.color = game.color;
-                    gameInfo.style.borderColor = game.borderColor;
-                    gameInfo.style.boxShadow = `0 0 20px ${game.borderColor}66, inset 0 0 20px ${game.borderColor}11`;
-                    
-                    gameInfo.classList.add('show');
-                    
-                    playHoverSound();
-                });
+                // Mouse Events
+                if (!isTouchDevice) {
+                    machine.addEventListener('mouseenter', function() {
+                        showGameInfo(this);
+                    });
 
-                machine.addEventListener('mouseleave', function() {
-                    gameInfo.classList.remove('show');
-                });
+                    machine.addEventListener('mouseleave', function() {
+                        gameInfo.classList.remove('show');
+                    });
+                }
 
+                // Click/Touch Events
                 machine.addEventListener('click', function() {
                     const gameName = this.getAttribute('data-game');
                     startGame(gameName);
                 });
+
+                machine.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    showGameInfo(this);
+                    
+                    // Nach 2 Sekunden Info ausblenden
+                    setTimeout(() => {
+                        gameInfo.classList.remove('show');
+                    }, 2000);
+                });
             });
+
+            function showGameInfo(machine) {
+                const gameName = machine.getAttribute('data-game');
+                const game = gameData[gameName];
+                
+                gameTitle.textContent = game.title;
+                gameDesc.textContent = game.description;
+                
+                gameInfo.style.color = game.color;
+                gameInfo.style.borderColor = game.borderColor;
+                gameInfo.style.boxShadow = `0 0 20px ${game.borderColor}66, inset 0 0 20px ${game.borderColor}11`;
+                
+                gameInfo.classList.add('show');
+                
+                playHoverSound();
+            }
         }
 
         // Sound-Effekte
@@ -688,7 +828,7 @@
         function playEntranceSound() {
             try {
                 entranceMusic = new Audio('spielhalle.mp3');
-                entranceMusic.volume = 0.4; // Etwas lauter als Hintergrundmusik
+                entranceMusic.volume = 0.4;
                 
                 entranceMusic.play().catch(e => {
                     console.log('Eingangs-Sound konnte nicht abgespielt werden:', e);
@@ -740,86 +880,6 @@
                 light.style.zIndex = '1';
                 
                 container.appendChild(light);
-            }
-        }
-
-        // Responsives Design
-        function adjustLayout() {
-            if (!isInArcade) return;
-            
-            const container = document.getElementById('gameContainer');
-            const machines = document.querySelectorAll('.arcade-machine');
-            const containerWidth = container.offsetWidth;
-            
-            if (containerWidth < 800) {
-                // Mobile Layout
-                machines.forEach((machine, index) => {
-                    machine.style.width = '140px';
-                    machine.style.height = '210px';
-                    machine.style.left = (12 + index * 19) + '%';
-                    machine.style.bottom = '15%';
-                    machine.style.top = 'auto';
-                });
-                
-                document.querySelector('.neon-title').style.fontSize = '2rem';
-            } else if (containerWidth < 1200) {
-                // Tablet Layout
-                machines.forEach((machine, index) => {
-                    machine.style.width = '200px';
-                    machine.style.height = '300px';
-                    machine.style.left = (13 + index * 17) + '%';
-                    machine.style.bottom = '20%';
-                    machine.style.top = 'auto';
-                });
-                
-                document.querySelector('.neon-title').style.fontSize = '2.5rem';
-            } else {
-                // Desktop Layout
-                const jetattack = document.getElementById('jetattack');
-                const junglerun = document.getElementById('junglerun');
-                const tankbattle = document.getElementById('tankbattle');
-                const spaceenemy = document.getElementById('spaceenemy');
-                
-                if (jetattack) {
-                    jetattack.style.width = '280px';
-                    jetattack.style.height = '420px';
-                    jetattack.style.left = '15%';
-                    jetattack.style.bottom = '25%';
-                    jetattack.style.top = 'auto';
-                    jetattack.className = 'arcade-machine';
-                }
-                
-                if (junglerun) {
-                    junglerun.style.width = '280px';
-                    junglerun.style.height = '420px';
-                    junglerun.style.left = '30%';
-                    junglerun.style.bottom = '25%';
-                    junglerun.style.top = 'auto';
-                    junglerun.className = 'arcade-machine';
-                }
-                
-                if (tankbattle) {
-                    tankbattle.style.width = '280px';
-                    tankbattle.style.height = '420px';
-                    tankbattle.style.left = '45%';
-                    tankbattle.style.bottom = '25%';
-                    tankbattle.style.top = 'auto';
-                    tankbattle.className = 'arcade-machine';
-                }
-                
-                if (spaceenemy) {
-                    spaceenemy.style.width = '280px';
-                    spaceenemy.style.height = '420px';
-                    spaceenemy.style.left = '60%';
-                    spaceenemy.style.bottom = '25%';
-                    spaceenemy.style.top = 'auto';
-                    spaceenemy.className = 'arcade-machine';
-                }
-                
-                const neonTitle = document.querySelector('.neon-title');
-                if (neonTitle) {
-                    neonTitle.style.fontSize = '3rem';
-                }
             }
         }
 
@@ -885,7 +945,10 @@
         }
 
         // Event-Listener
-        window.addEventListener('resize', adjustLayout);
+        window.addEventListener('resize', function() {
+            // Keine manuelle Anpassung mehr nötig - CSS Media Queries übernehmen das
+            console.log('Fenster-Größe geändert - responsive Design aktiv');
+        });
         
         // Musik wieder starten wenn Fenster Fokus zurück bekommt
         window.addEventListener('focus', function() {
@@ -896,13 +959,67 @@
                 });
             }
         });
-        
+
+        // Orientierungswechsel-Handler für mobile Geräte
+        window.addEventListener('orientationchange', function() {
+            console.log('Orientierung geändert:', window.orientation);
+            // CSS Media Queries handhaben die Anpassung automatisch
+        });
+
+        // Verhindere Zoom auf Doppel-Tap für Touch-Geräte
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
         // Initialisierung
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎮 Retro Arcade Titelbildschirm geladen!');
-            console.log('👆 Bewege die Maus über die Tür zum Betreten!');
+            
+            if (isTouchDevice) {
+                console.log('📱 Touch-Gerät erkannt - Touch-Optimierungen aktiv');
+                console.log('👆 Tippe auf die Tür zum Betreten!');
+            } else {
+                console.log('🖱️ Desktop-Gerät erkannt');
+                console.log('👆 Bewege die Maus über die Tür zum Betreten!');
+            }
+            
             console.log('⌨️  Drücke ESC in der Spielhalle um zurückzukehren!');
+            
+            // Viewport-Größe loggen für Debugging
+            console.log(`Viewport: ${window.innerWidth}x${window.innerHeight}px`);
+            
+            // Geräteerkennung
+            const screenWidth = window.innerWidth;
+            if (screenWidth <= 768) {
+                console.log('📱 Mobile Ansicht aktiv');
+            } else if (screenWidth <= 1024) {
+                console.log('📱 Tablet Ansicht aktiv');
+            } else {
+                console.log('🖥️ Desktop Ansicht aktiv');
+            }
         });
+
+        // Performance-Optimierung für mobile Geräte
+        if (isTouchDevice) {
+            // Reduziere Animationen auf mobilen Geräten
+            const style = document.createElement('style');
+            style.textContent = `
+                @media (hover: none) and (pointer: coarse) {
+                    * {
+                        animation-duration: 0.5s !important;
+                    }
+                    .scanlines {
+                        display: none;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
     </script>
 </body>
 </html>
