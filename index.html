@@ -14,6 +14,209 @@
             cursor: crosshair;
         }
 
+        .worksheet-intro {
+            position: fixed;
+            inset: 0;
+            z-index: 9000;
+            display: grid;
+            place-items: center;
+            padding: clamp(18px, 4vw, 48px);
+            background:
+                radial-gradient(circle at 16% 18%, rgba(255, 0, 180, 0.22), transparent 34%),
+                radial-gradient(circle at 82% 12%, rgba(0, 210, 255, 0.18), transparent 30%),
+                linear-gradient(135deg, rgba(3, 7, 24, 0.96), rgba(8, 1, 18, 0.97));
+            color: #f7fbff;
+            cursor: default;
+            transition: opacity 0.45s ease, visibility 0.45s ease;
+        }
+
+        .worksheet-intro *,
+        .worksheet-intro *::before,
+        .worksheet-intro *::after {
+            box-sizing: border-box;
+        }
+
+        .worksheet-intro.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .worksheet-intro::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 86%);
+        }
+
+        .worksheet-shell {
+            position: relative;
+            width: min(1180px, 100%);
+            max-height: min(850px, 94vh);
+            display: grid;
+            grid-template-columns: minmax(280px, 0.82fr) minmax(360px, 1.18fr);
+            gap: clamp(18px, 3vw, 34px);
+            padding: clamp(18px, 3vw, 34px);
+            border: 1px solid rgba(80, 210, 255, 0.32);
+            border-radius: 24px;
+            background: rgba(5, 9, 26, 0.78);
+            box-shadow:
+                0 0 55px rgba(0, 180, 255, 0.18),
+                0 0 95px rgba(255, 0, 190, 0.12),
+                inset 0 0 50px rgba(255, 255, 255, 0.035);
+            backdrop-filter: blur(18px);
+            overflow: hidden;
+        }
+
+        .worksheet-shell::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #2ee8ff, #ff35d4, transparent);
+            opacity: 0.9;
+        }
+
+        .worksheet-copy,
+        .worksheet-preview {
+            position: relative;
+            z-index: 1;
+        }
+
+        .worksheet-eyebrow {
+            color: #57e8ff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .worksheet-copy h1 {
+            margin: 0 0 14px;
+            font-size: clamp(2rem, 5vw, 4.5rem);
+            line-height: 0.96;
+            color: #fff;
+            text-shadow: 0 0 16px rgba(255, 0, 210, 0.55), 0 0 32px rgba(0, 210, 255, 0.28);
+        }
+
+        .worksheet-copy h2 {
+            margin: 0 0 18px;
+            font-size: clamp(1rem, 2vw, 1.32rem);
+            line-height: 1.35;
+            color: #d7e9ff;
+            font-weight: 700;
+        }
+
+        .worksheet-copy p {
+            margin: 0 0 16px;
+            color: #aebcce;
+            font-family: Arial, sans-serif;
+            font-size: clamp(0.9rem, 1.6vw, 1rem);
+            line-height: 1.58;
+        }
+
+        .worksheet-points {
+            display: grid;
+            gap: 10px;
+            margin: 22px 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .worksheet-points li {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            color: #d7e9ff;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .worksheet-points li::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff35d4;
+            box-shadow: 0 0 14px #ff35d4;
+            flex: 0 0 auto;
+        }
+
+        .worksheet-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .worksheet-btn {
+            border: 1px solid rgba(87, 232, 255, 0.52);
+            border-radius: 999px;
+            padding: 13px 20px;
+            color: #e9fbff;
+            background: rgba(9, 20, 44, 0.72);
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+
+        .worksheet-btn.primary {
+            color: #050718;
+            border-color: transparent;
+            background: linear-gradient(90deg, #23dfff, #ff3ed2);
+            box-shadow: 0 0 24px rgba(255, 62, 210, 0.28);
+        }
+
+        .worksheet-btn:hover,
+        .worksheet-btn:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 0 28px rgba(35, 223, 255, 0.32);
+            outline: none;
+        }
+
+        .worksheet-preview {
+            min-height: 520px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.08);
+            overflow: auto;
+            box-shadow: inset 0 0 30px rgba(255,255,255,0.04);
+        }
+
+        .worksheet-pages {
+            display: grid;
+            gap: 18px;
+            padding: 18px;
+        }
+
+        .worksheet-pages img {
+            width: 100%;
+            display: block;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 16px 38px rgba(0, 0, 0, 0.3);
+        }
+
+        .worksheet-fallback {
+            display: none;
+            padding: 20px;
+            color: #d7e9ff;
+            font-family: Arial, sans-serif;
+        }
+
         /* Titelbildschirm Styles */
         #titleScreen {
             position: relative;
@@ -370,6 +573,33 @@
 
         /* Mobile und Tablet Optimierungen */
         @media screen and (max-width: 768px) {
+            .worksheet-intro {
+                overflow-y: auto;
+                align-items: flex-start;
+                padding: 14px;
+            }
+
+            .worksheet-shell {
+                grid-template-columns: 1fr;
+                max-height: none;
+                margin: 0 auto;
+                border-radius: 18px;
+            }
+
+            .worksheet-preview,
+            .worksheet-preview iframe {
+                min-height: 380px;
+            }
+
+            .worksheet-actions {
+                flex-direction: column;
+            }
+
+            .worksheet-btn {
+                width: 100%;
+                text-align: center;
+            }
+
             .arcade-machines-container {
                 flex-direction: row;
                 flex-wrap: wrap;
@@ -479,6 +709,41 @@
     <!-- Übergangseffekt -->
     <div id="transitionOverlay" class="transition-overlay"></div>
 
+    <!-- Vorgeschaltetes AG-Arbeitsblatt -->
+    <section id="worksheetIntro" class="worksheet-intro" aria-label="Computer-AG Briefing">
+        <div class="worksheet-shell">
+            <div class="worksheet-copy">
+                <div class="worksheet-eyebrow">Computer-AG &middot; Programmieren mit KI</div>
+                <h1>Arcade80</h1>
+                <h2>Erst das Briefing, dann die Spielhalle.</h2>
+                <p>
+                    In dieser AG entwickelst du eigene Spiele und Webseiten mit HTML, CSS,
+                    JavaScript und modernen KI-Werkzeugen. Programmierkenntnisse sind nicht
+                    notwendig, Neugier und Lust auf Technik reichen.
+                </p>
+                <ul class="worksheet-points">
+                    <li>Geeignet fuer Schuelerinnen und Schueler der Jahrgaenge 9 und 10.</li>
+                    <li>Du lernst Schritt fuer Schritt, wie aus Ideen kleine Anwendungen werden.</li>
+                    <li>Arcade80 ist die Beispiel-Spielhalle, die komplett mit KI-Unterstuetzung entstanden ist.</li>
+                </ul>
+                <p>
+                    Lies das Arbeitsblatt kurz durch. Wenn du bereit bist, startest du den
+                    Arcade-Eingang und kannst die Spielhalle betreten.
+                </p>
+                <div class="worksheet-actions">
+                    <button id="enterFromWorksheet" class="worksheet-btn primary" type="button">Spielhalle betreten</button>
+                    <a class="worksheet-btn" href="ComputerAG.pdf" target="_blank" rel="noopener">PDF oeffnen</a>
+                </div>
+            </div>
+            <div class="worksheet-preview" aria-label="Vorschau des Arbeitsblatts">
+                <div class="worksheet-pages">
+                    <img src="ComputerAG-page1.png" alt="Arbeitsblatt Computer-AG Seite 1">
+                    <img src="ComputerAG-page2.png" alt="Arbeitsblatt Computer-AG Seite 2">
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Titelbildschirm -->
     <div id="titleScreen">
         <!-- Unsichtbarer Tür-Hotspot -->
@@ -579,6 +844,8 @@
         const transitionOverlay = document.getElementById('transitionOverlay');
         const serviceSprite = document.getElementById('serviceSprite');
         const serviceMessage = document.getElementById('serviceMessage');
+        const worksheetIntro = document.getElementById('worksheetIntro');
+        const enterFromWorksheet = document.getElementById('enterFromWorksheet');
         
         let isInArcade = false;
         let serviceInteractionDone = false;
@@ -587,6 +854,15 @@
 
         // Touch-Event Unterstützung
         const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+        if (enterFromWorksheet) {
+            enterFromWorksheet.addEventListener('click', function() {
+                worksheetIntro.classList.add('hidden');
+                setTimeout(() => {
+                    enterArcadeHandler();
+                }, 420);
+            });
+        }
 
         // Tür-Hover-Effekt (nur für nicht-Touch-Geräte)
         if (!isTouchDevice) {
